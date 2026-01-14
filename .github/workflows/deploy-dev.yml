@@ -20,7 +20,8 @@ jobs:
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.cargo/bin:$PATH"
+          uv --version
       
       - name: Install Databricks CLI
         run: |
@@ -28,6 +29,7 @@ jobs:
       
       - name: Deploy bundle to dev
         run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
           echo "Deploying bundle to target=dev"
           databricks bundle deploy -t dev
         env:
