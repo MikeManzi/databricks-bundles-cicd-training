@@ -1,0 +1,24 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  validate-bundle:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+      
+      - name: Validate bundle configuration
+        run: |
+          databricks bundle validate -t dev
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
