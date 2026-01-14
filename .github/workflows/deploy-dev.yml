@@ -12,12 +12,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.cargo/bin:$PATH"
+          uv --version
+      
       - name: Install Databricks CLI
         run: |
           curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
       
       - name: Deploy bundle to dev
         run: |
+          export PATH="$HOME/.cargo/bin:$PATH"
           echo "Deploying bundle to target=dev"
           databricks bundle deploy -t dev
         env:
