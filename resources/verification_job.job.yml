@@ -1,0 +1,17 @@
+# A verification job for CI/CD testing.
+
+resources:
+  jobs:
+    verification_job:
+      name: verification_job
+      
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+      
+      tasks:
+        - task_key: create_test_table
+          notebook_task:
+            notebook_path: ../src/verification_notebook.ipynb
