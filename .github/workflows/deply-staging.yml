@@ -1,0 +1,37 @@
+name: Deploy to Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.cargo/bin:$PATH"
+          uv --version
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Deploy to Staging
+        run: |
+          databricks bundle deploy --target staging
+
+      - name: Print deployed resources
+        run: |
+          databricks bundle summary --target staging
+
+      - name: Trigger Job Run
+        run: |
+          databricks bundle run cicd_training_job --target staging

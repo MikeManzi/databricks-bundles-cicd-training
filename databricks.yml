@@ -23,6 +23,14 @@ variables:
     description: The catalog to use
   schema:
     description: The schema to use
+  input_path:
+    description: The input path 
+  run_mode:
+    description: Sample or Full
+  processing_date:
+    description: The processing date in YYYY-MM-DD format
+  environment:
+    description: The dev or staging environment
 
 targets:
   dev:
@@ -35,8 +43,24 @@ targets:
     workspace:
       host: https://dbc-593a8733-98a2.cloud.databricks.com
     variables:
+      input_path: /Workspace/Shared/dev_input_data
+      run_mode: sample
+      processing_date: "2026-01-15"
       catalog: workspace
       schema: ${workspace.current_user.short_name}
+      environment: dev
+  staging:
+    mode: production
+    workspace:
+      host: https://dbc-593a8733-98a2.cloud.databricks.com
+      root_path: /Workspace/Users/manzimike378@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      input_path: /Workspace/Shared/staging_input_data
+      run_mode: full
+      processing_date: "2026-01-15"
+      environment: staging
+      catalog: workspace
+      schema: ${workspace.current_user.short_name}_staging
   prod:
     mode: production
     workspace:

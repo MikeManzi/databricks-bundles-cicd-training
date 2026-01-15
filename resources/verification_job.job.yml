@@ -6,3 +6,8 @@ resources:
         - task_key: verify_workspace_task
           notebook_task:
             notebook_path: ../src/verification_notebook.ipynb
+            base_parameters:
+              run_mode: ${var.run_mode}
+              environment: ${var.environment}
+              input_path: ${var.input_path}
+              processing_date: ${var.processing_date}
