@@ -7,7 +7,10 @@ on:
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
-    
+    environment: DEV_DATABRICKS
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,9 +35,6 @@ jobs:
           export PATH="$HOME/.cargo/bin:$PATH"
           echo "Deploying bundle to target=dev"
           databricks bundle deploy -t dev
-        env:
-          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
       
       - name: Run verification job
         run: |
